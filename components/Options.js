@@ -103,6 +103,28 @@ function Options() {
             />
             <span className="ml-2 text-white text-lg">mask-blur</span>
           </label>
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="mode"
+              value="maskblur_pose"
+              checked={mode === 'maskblur_pose'}
+              onChange={() => switchMode('maskblur_pose')}
+              className="form-radio text-red-600 h-5 w-5"
+            />
+            <span className="ml-2 text-white text-lg">mask-blur_pose</span>
+          </label>
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="mode"
+              value="maskblack_pose"
+              checked={mode === 'maskblack_pose'}
+              onChange={() => switchMode('maskblack_pose')}
+              className="form-radio text-red-600 h-5 w-5"
+            />
+            <span className="ml-2 text-white text-lg">mask-black_pose</span>
+          </label>
         </div>
       </div>
     </>

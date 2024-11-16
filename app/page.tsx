@@ -1,5 +1,6 @@
 import NavBar from '../components/NavBar'
 import LiveFeed from '../components/LiveFeed'
+import Camera from '../components/Camera'
 import Options from '../components/Options'
 import Qr from '../components/Qr'
 
@@ -13,7 +14,7 @@ export default function Home() {
           <Options />
           <Qr />
         </div>
-      <LiveFeed />
+      <Camera />
       </div>
     </div>
   );
