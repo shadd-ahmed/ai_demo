@@ -6,9 +6,90 @@ import numpy as np
 
 # 0: Nose 1: Left Eye 2: Right Eye 3: Left Ear 4: Right Ear 5: Left Shoulder 6: Right Shoulder 7: Left Elbow 8: Right Elbow 9: Left Wrist 10: Right Wrist 11: Left Hip 12: Right Hip 13: Left Knee 14: Right Knee 15: Left Ankle 16: Right Ankle
 pairs = [(15, 13), (16, 14),(13, 11),(12, 14),(11, 12),(11, 5),(12, 6),(5, 6),(5, 7),(6, 8),(7, 9),(8, 10),(0, 1),(0, 2),(1, 3),(2, 4)]
+last_10_keypoints = []
+
+CONTOURS_LEVELS = {
+    1: {
+        "blur_kernel_size": 3,
+        "laplacian_kernel_size": 3,
+        "laplacian_scale": 1.9,
+        "laplacian_delta": 20,
+    },
+    2: {
+        "blur_kernel_size": 5,
+        "laplacian_kernel_size": 5,
+        "laplacian_scale": 1,
+        "laplacian_delta": -20,
+    },
+    3: {
+        "blur_kernel_size": 7,
+        "laplacian_kernel_size": 5,
+        "laplacian_scale": 1,
+        "laplacian_delta": -10,
+    },
+    4: {
+        "blur_kernel_size": 11,
+        "laplacian_kernel_size": 5,
+        "laplacian_scale": 1,
+        "laplacian_delta": 0,
+    },
+    5: {
+        "blur_kernel_size": 17,
+        "laplacian_kernel_size": 5,
+        "laplacian_scale": 1.2,
+        "laplacian_delta": 10,
+    },
+}
+
+COLORS = [
+    (255, 0, 0),     # Red
+    (0, 255, 0),     # Green
+    (0, 0, 255),     # Blue
+    (255, 255, 0),   # Yellow
+    (255, 0, 255),   # Magenta
+    (0, 255, 255),   # Cyan
+    (128, 0, 0),     # Maroon
+    (128, 128, 0),   # Olive
+    (0, 128, 0),     # Dark Green
+    (128, 0, 128),   # Purple
+    (0, 128, 128),   # Teal
+    (0, 0, 128),     # Navy
+    (192, 192, 192), # Silver
+    (128, 128, 128), # Gray
+    (255, 165, 0),   # Orange
+]
+
 
 model_pose = YOLO('yolo11n-pose.pt')
 model_seg = YOLO('yolo11n-seg.pt')
+
+def contours(frame):
+    results = model_seg(frame)    
+
+    masks = results[0].masks.xy # get masks for frame
+    col_mask = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8) # blank colored mask
+    for m in masks: # for every detection 
+        points = m.astype(int) # convert coord to int
+        points = points.reshape((1, len(points), 2)) # reshape to fit cv2 func arguments 
+        edges = cv2.Canny(col_mask, threshold1=50, threshold2=150)
+        
+    frame = cv2.addWeighted(frame, 0.7, cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR), 0.3, 0)
+
+    return frame
+
+def track(frame):
+    results = model_pose(frame)
+    last_10_keypoints.append(results[0].keypoints[0].xy[0].cpu().numpy().astype(int)[0])
+    
+    if len(last_10_keypoints) > 10:
+        last_10_keypoints.pop(0)
+    
+    for i in range(1, len(last_10_keypoints)):
+        pt1 = last_10_keypoints[i-1]
+        pt2 = last_10_keypoints[i]
+        cv2.line(frame, pt1, pt2, (0, 255, 0), 2)  # Green line with thickness 2
+    
+    return frame
 
 def add_kpts(frame, kpts):
     for kpt in kpts: # for every detection 
@@ -89,3 +170,38 @@ def segmentation(frame):
 def pose(frame):
     results = model_pose(frame)
     return add_kpts(frame, results[0].keypoints)
+
+def pose_black(frame):
+    results = model_pose(frame)
+    canvas = np.zeros(frame.shape)
+    return add_kpts(canvas, results[0].keypoints)
+
+def outline_black(frame):
+
+    results = model_seg(frame)    
+
+    masks = results[0].masks.xy # get masks for frame
+    binary_mask = np.zeros((frame.shape[0], frame.shape[1]), dtype=np.uint8)  # Blank binary mask
+    canvas = np.zeros(frame.shape)
+    for m in masks: # for every detection 
+        points = m.astype(int) # convert coord to int
+        points = points.reshape((1, len(points), 2)) # reshape to fit cv2 func arguments 
+        cv2.fillPoly(binary_mask, points, color=1)  # 1 indicates inside the polygon
+        contours, _ = cv2.findContours(binary_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cv2.drawContours(canvas, contours, -1, (0, 255, 0), 2)  # Green contours with thickness 2
+
+    return canvas
+
+def outline(frame):
+    results = model_seg(frame)    
+
+    masks = results[0].masks.xy # get masks for frame
+    binary_mask = np.zeros((frame.shape[0], frame.shape[1]), dtype=np.uint8)  # Blank binary mask
+    for m in masks: # for every detection 
+        points = m.astype(int) # convert coord to int
+        points = points.reshape((1, len(points), 2)) # reshape to fit cv2 func arguments 
+        cv2.fillPoly(binary_mask, points, color=1)  # 1 indicates inside the polygon
+        contours, _ = cv2.findContours(binary_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cv2.drawContours(frame, contours, -1, (0, 255, 0), 2)  # Green contours with thickness 2
+
+    return frame

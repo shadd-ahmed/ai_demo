@@ -125,6 +125,31 @@ function Options() {
             />
             <span className="ml-2 text-white text-lg">mask-black_pose</span>
           </label>
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="mode"
+              value="pose_black"
+              checked={mode === 'pose_black'}
+              onChange={() => switchMode('pose_black')}
+              className="form-radio text-red-600 h-5 w-5"
+            />
+            <span className="ml-2 text-white text-lg">pose_black</span>
+          </label>
+
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="mode"
+              value="outline"
+              checked={mode === 'outline'}
+              onChange={() => switchMode('outline')}
+              className="form-radio text-red-600 h-5 w-5"
+            />
+            <span className="ml-2 text-white text-lg">outline</span>
+          </label>
+
+
         </div>
       </div>
     </>

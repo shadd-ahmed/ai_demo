@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 import cv2
 import numpy as np
 import torch
+from ultralytics import SAM
+
+model = SAM("sam2.1_t.pt")
+
 
 if torch.cuda.is_available():
     device = torch.device("cuda")
@@ -32,9 +36,6 @@ def show_anns(anns, borders=True):
     if len(anns) == 0:
         return
     sorted_anns = sorted(anns, key=(lambda x: x['area']), reverse=True)
-    # ax = plt.gca()
-    # ax.set_autoscale_on(False)
-
     img = np.ones((sorted_anns[0]['segmentation'].shape[0], sorted_anns[0]['segmentation'].shape[1], 4))
     img[:, :, 3] = 0
     for ann in sorted_anns:
@@ -48,8 +49,8 @@ def show_anns(anns, borders=True):
             cv2.drawContours(img, contours, -1, (0, 0, 1, 0.4), thickness=1) 
     return img
 
-sam2_checkpoint = "checkpoints/sam2.1_hiera_tiny.pt"
-model_cfg = "C:/Users/User/Desktop/final_demo/frontend/backend/sam2_code/sam2/configs/sam2.1/sam2.1_hiera_t.yaml"
+sam2_checkpoint = "sam2.1_t.pt"
+model_cfg = "configs/sam2.1/sam2.1_hiera_t.yaml"
 
 sam2 = build_sam2(model_cfg, sam2_checkpoint, device=device, apply_postprocessing=False)
 mask_generator = SAM2AutomaticMaskGenerator(sam2)

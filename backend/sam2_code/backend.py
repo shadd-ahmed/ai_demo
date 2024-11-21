@@ -6,7 +6,8 @@ from flask_cors import CORS
 import cv2
 import numpy as np
 from ultralytics import YOLO
-from utils import pose, segmentation, mask_color, mask_blur, mask_blur_pose, mask_color_pose
+from utils import *
+#pose, segmentation, mask_color, mask_blur, mask_blur_pose, mask_color_pose, pose_black, outline, outline_black
 from sam_util import sam_seg
 
 app = Flask(__name__)
@@ -21,7 +22,7 @@ current_mode = "raw"  # Default to raw feed
 def set_mode():
     global current_mode
     mode = request.json.get('mode')
-    if mode in ["raw", "maskblack", "maskblur", "maskblack_pose", "maskblur_pose", "segmentation", "bounding-box", 'pose', 'sam']:
+    if mode in ["raw", "maskblack", "maskblur", "maskblack_pose", "maskblur_pose", "segmentation", "bounding-box", 'pose', 'sam', 'pose_black', 'outline']:
         current_mode = mode
         return {'message': f'Mode switched to {mode}'}, 200
     return {'error': 'Invalid mode'}, 400
@@ -58,8 +59,13 @@ def process():
         frame = pose(frame)
     elif current_mode == "segmentation":
         frame = segmentation(frame)
-    elif current_mode == "sam":
-        frame = sam_seg(frame)
+    elif current_mode == "outline":
+        frame = outline_black(frame)
+    elif current_mode == "pose_black":
+        frame = track(frame)
+    # elif current_mode == "pose_black":
+    #     frame = pose_black(frame)
+        # frame = sam_seg(frame)
     elif current_mode == "bounding-box":
         result = model_det(frame)
         frame = result[0].plot()
