@@ -153,17 +153,17 @@ def mask_color(frame):
     return frame
 
 def segmentation(frame):
-    results = model_seg(frame)    
+    # results = model_seg(frame)    
 
-    masks = results[0].masks.xy # get masks for frame
-    col_mask = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8) # blank colored mask
-    for m in masks: # for every detection 
-        points = m.astype(int) # convert coord to int
-        points = points.reshape((1, len(points), 2)) # reshape to fit cv2 func arguments 
-        color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255)) # generate random color for the mask 
-        cv2.fillPoly(col_mask, points, color=color) # fill the mask 
+    # masks = results[0].masks.xy # get masks for frame
+    # col_mask = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8) # blank colored mask
+    # for m in masks: # for every detection 
+    #     points = m.astype(int) # convert coord to int
+    #     points = points.reshape((1, len(points), 2)) # reshape to fit cv2 func arguments 
+    #     color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255)) # generate random color for the mask 
+    #     cv2.fillPoly(col_mask, points, color=color) # fill the mask 
         
-    frame = cv2.addWeighted(frame, 1, col_mask, 0.5, 0)
+    # frame = cv2.addWeighted(frame, 1, col_mask, 0.5, 0)
 
     return frame
 

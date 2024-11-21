@@ -1,15 +1,44 @@
 'use client'
 import { useState, useEffect, useRef } from 'react';
-// require('dotenv').config();
+import {socket} from '../socket'
+// import { io } from 'socket.io-client';
 
-// Access environment variables
 
 export default function Camera() {
-  const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const [processedImage, setProcessedImage] = useState(null);
-  const canvasRef = useRef(null);
-  const videoRef = useRef(null);
-  console.log("[Node.js only] ENV_VARIABLE:", process.env.NEXT_PUBLIC_BACKEND_URL);
+   // Your Flask server URL
+const [processedImage, setProcessedImage] = useState(null);
+const canvasRef = useRef(null);
+const videoRef = useRef(null);
+const socketRef = useRef(null);
+
+
+useEffect(() => {
+  // Initialize WebSocket connection
+  // const socket = io('http://localhost:5000', { reconnection: false,  // Disable automatic reconnections
+  // });
+    // socketRef.current = socket;
+
+    socket.on('connect', () => {
+      console.log('Connected to the server');
+    });
+
+    // Listen for the processed image from the backend
+    socket.on('processed_frame', (data) => {
+      // Handle the processed frame from the server
+      if (data.image) {
+        // console.log('data image', data.image)
+        setProcessedImage(data.image);  // Set the image received from server
+      }
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from the server');
+    });
+
+    return () => {
+      socket.close();  // Cleanup the connection
+    };
+  }, []);
 
   useEffect(() => {
     // Initialize the camera feed when the component mounts
@@ -56,23 +85,10 @@ export default function Camera() {
     // Convert canvas to Base64-encoded PNG
     const base64Image = canvas.toDataURL('image/png');
 
-    const url = backend_url.concat('process')
+    // if (socketRef.current && socketRef.current.connected) {
+      // }
+    socket.emit('send_frame', { image: base64Image});
 
-    // Send the Base64-encoded image to the backend for processing
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ image: base64Image }),
-    });
-
-    if (response.ok) {
-      const result = await response.blob();
-      setProcessedImage(URL.createObjectURL(result)); // Set the processed image as a blob URL
-    } else {
-      console.error('Failed to process image');
-    }
   };
 
   useEffect(() => {
@@ -83,12 +99,14 @@ export default function Camera() {
     return () => {
       clearInterval(intervalId);
     };
+
+    // className="hidden"
   }, []);
 
   return (
     <>
-      <video ref={videoRef} autoPlay playsInline  className="hidden"  />
-      <canvas ref={canvasRef}  className="hidden"/>
+      <video ref={videoRef} autoPlay playsInline   className="hidden" />
+      <canvas ref={canvasRef} className="hidden"/>
 
       {processedImage && (
         <div className="aspect-video w-[70%] h-1/2 bg-gray-900 p-5 m-5 rounded-xl">

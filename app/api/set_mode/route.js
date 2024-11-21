@@ -2,7 +2,7 @@
 
 
 export async function POST(req) {
-    const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const backend_url = 'http://localhost:7000/' // process.env.NEXT_PUBLIC_BACKEND_URL;
     const { mode } = await req.json();
     const url = backend_url.concat('set_mode')
     console.log('url is ', url)
