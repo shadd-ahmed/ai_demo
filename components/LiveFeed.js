@@ -1,11 +1,13 @@
 function LiveFeed() {
+  const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL
+  const url = backend_url.concat('get_frame')
   return (
     <>
-    <div className="aspect-video w-[70%] h-1/2 bg-gray-900 p-5 m-5 rounded-xl">
+    <div className="w-[80%] h-full border-[#CA6A2E] border-2 m-5 rounded-xl">
         <img
-          src="http://localhost:5000/video_feed"
+          src="http://localhost:5000/get_frame"
           alt="Live Feed"
-          className="aspect-video w-full rounded-xl border-2 border-gray-300"
+          className="aspect-video w-full rounded-xl"
         />
     </div> 
     </>

@@ -1,20 +1,21 @@
 import NavBar from '../components/NavBar'
 import LiveFeed from '../components/LiveFeed'
-import Camera from '../components/Camera'
+// import Camera from '../components/Camera'
 import Options from '../components/Options'
-import Qr from '../components/Qr'
+import QR from '../components/Qr'
 
 export default function Home() {
   
+  // <div className="bg-[url('/bg_image.png')]">
   return (
-    <div className=" bg-black">
-      <NavBar />
+    <div className="">
+    <NavBar />
       <div className='flex justify-between'>
-        <div className=' flex flex-col justify-between '>
+        <div className='flex justify-between flex-col'>
           <Options />
-          <Qr />
+          <QR />
         </div>
-      <Camera />
+          <LiveFeed />
       </div>
     </div>
   );
