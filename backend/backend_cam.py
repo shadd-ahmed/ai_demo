@@ -1,6 +1,4 @@
-from flask import Flask, request, jsonify, send_file, Response
-import io
-import base64
+from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 import cv2
 import numpy as np
@@ -10,7 +8,6 @@ from utils import *
 app = Flask(__name__)
 CORS(app)  # Enable CORS if needed
 
-model_det = YOLO('yolo11n.pt')
 
 current_mode = "raw"  # Default to raw feed
 
@@ -20,16 +17,20 @@ modes = [
 'Segmentation',
 'Pose',
 'Pose with Black Background',
-'Tracking',
+'Tracking with Left Hand',
+'Tracking with Right Hand',
+'Tracking with Nose',
 'Outline',
 'Outline with Black Background',
 'Masking', 
 'Masking with Black Filling', 
 'Masking with Blurring',
-'Pose + Masking',
-'Pose + Masking with Black Filling',
-'Pose + Masking with Blurring'
+'Pose+Masking',
+'Pose+Masking with Black Filling',
+'Pose+Masking with Blurring'
 ]
+
+# SUGGESTIONS : use keys from tiles instead of text. should be a simple list based IF instead of chanigng names... keys will stay same. but see how to cater to options...
 
 # funcs = [segmentation]
 
@@ -45,16 +46,16 @@ def set_mode():
 
 
 def get_frame():
-    cap = cv2.VideoCapture(1)  # Video source (webcam or video file) ...
+    cap = cv2.VideoCapture(0)  # Video source (webcam or video file) ...
     while cap.isOpened():
         success, frame = cap.read()
         if not success:
             print('issue')
             break
 
-        if current_mode == "Pose + Masking with Black Filling":
+        if current_mode == "Pose+Masking with Black Filling":
             frame = mask_color_pose(frame)
-        elif current_mode == "Pose + Masking with Blurring":
+        elif current_mode == "Pose+Masking with Blurring":
             frame = mask_blur_pose(frame)
         elif current_mode == "Masking with Blurring":
             frame = mask_blur(frame)
@@ -70,12 +71,14 @@ def get_frame():
             frame = outline(frame)
         elif current_mode == 'Outline with Black Background':
             frame = outline_black(frame)
-        elif current_mode == "Tracking":
-            frame = np.fliplr(np.array(frame))
-            frame = track(frame)
+        elif current_mode == "Tracking with Left Hand": 
+            frame = track(frame, 10)
+        elif current_mode == "Tracking with Right Hand":
+            frame = track(frame, 9)
+        elif current_mode == "Tracking with Nose":
+            frame = track(frame, 0)
         elif current_mode == 'Bounding Box':
-            result = model_det(frame)
-            frame = result[0].plot()
+            frame = bounding_box(frame)
 
         ret, buffer = cv2.imencode('.jpg', frame)
         if not ret:

@@ -61,6 +61,7 @@ COLORS = [
 
 model_pose = YOLO('yolo11n-pose.pt')
 model_seg = YOLO('yolo11n-seg.pt')
+model_det = YOLO('yolo11n.pt')
 
 def add_kpts(frame, kpts):
     for kpt in kpts: # for every detection 
@@ -79,30 +80,21 @@ def add_kpts(frame, kpts):
             cv2.line(frame, point1, point2, color=color, thickness=2)  # Draw a line between the points
     return frame
 
-def contours(frame):
-    results = model_seg(frame)    
-    if results:
-        masks = results[0].masks.xy # get masks for frame
-        col_mask = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8) # blank colored mask
-        for m in masks: # for every detection 
-            points = m.astype(int) # convert coord to int
-            points = points.reshape((1, len(points), 2)) # reshape to fit cv2 func arguments 
-            edges = cv2.Canny(col_mask, threshold1=50, threshold2=150)
-            
-        frame = cv2.addWeighted(frame, 0.7, cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR), 0.3, 0)
+def bounding_box(frame):
+    result = model_det(frame)
+    return result[0].plot()
 
-    return frame
-
-def track(frame):
+def track(frame, idx):
+    frame = np.fliplr(np.array(frame)) # reflect it to make sure we are tracking the right part. 
     col_mask = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8) # blank colored mask
     results = model_pose(frame)
 
     if results[0].keypoints[0].xy.shape[1]: # in case of no detections 
-        temp = results[0].keypoints[0].xy[0].cpu().numpy().astype(int)[0]
+        temp = results[0].keypoints[0].xy[0].cpu().numpy().astype(int)[idx]
         if temp[0] != 0 or temp[1] != 0: # see if still needed
             last_10_keypoints.append(temp)
         
-        if len(last_10_keypoints) > 10:
+        if len(last_10_keypoints) > 20:
             last_10_keypoints.pop(0)
         
         for i in range(1, len(last_10_keypoints)):

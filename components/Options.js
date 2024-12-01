@@ -1,11 +1,10 @@
 'use client'
 import { useState } from 'react';
 import Tile from './Tile';
-import Image from 'next/image'
 
 function Options() {
 
-    const [mode, setMode] = useState({txt:'Raw Feed'});
+    const [mode, setMode] = useState({txt:'Raw Feed', key:0});
 
     const switchMode = async (newMode) => {
       setMode(newMode);
@@ -20,18 +19,20 @@ function Options() {
 
     return (
     <>
-    <div className="p-5 m-5 rounded-xl overflow-scroll flex flex-col  h-[500px] justify-between ">
-        <Tile switchMode={switchMode} mode={mode} txt={'Raw Feed'}/>
-        <Tile switchMode={switchMode} mode={mode} txt={'Bounding Box'}  />
-        <Tile switchMode={switchMode} mode={mode} txt={'Segmentation'} />
-        <Tile switchMode={switchMode} mode={mode} txt={'Pose'} opts={['Pose with Black Background']} />
-        <Tile switchMode={switchMode} mode={mode} txt={'Tracking'} />
-        <Tile switchMode={switchMode} mode={mode} txt={'Outline'} opts={['Outline with Black Background']} />
-        <Tile switchMode={switchMode} mode={mode} txt={'Masking'} opts={['Masking with Black Filling', 'Masking with Blurring']} />
-        <Tile switchMode={switchMode} mode={mode} txt={'Pose + Masking'} opts={['Pose + Masking with Black Filling', 'Pose + Masking with Blurring']} />
+    <div className="p-1 m-5 mr-0 pr-0 rounded-xl overflow-scroll flex flex-col  h-[500px] space-y-4 shadow-card ">
+    <Tile switchMode={switchMode} mode={mode} idx={0} img={'/raw.jpg'} txt={'Raw Feed'}/>
+        <Tile switchMode={switchMode} mode={mode} idx={1} img={'/bounding_box.png'} txt={'Bounding Box'}  />
+        <Tile switchMode={switchMode} mode={mode} idx={2} img={'/segmentation.png'} txt={'Segmentation'} />
+        <Tile switchMode={switchMode} mode={mode} idx={3} img={'/pose_black.png'} txt={'Pose'} opts={['Black Background']} />
+        <Tile switchMode={switchMode} mode={mode} idx={4} img={'/tracking.png'} txt={'Tracking'} opts={['Left Hand', 'Right Hand', 'Nose',]}  />
+        <Tile switchMode={switchMode} mode={mode} idx={5} img={'/outline_black.png'} txt={'Outline'} opts={['Black Background']} />
+        <Tile switchMode={switchMode} mode={mode} idx={6} img={'/mask_blur.png'} txt={'Masking'} opts={['Black Filling', 'Blurring']} />
+        <Tile switchMode={switchMode} mode={mode} idx={7} img={'/mask_color_pose.png'} txt={'Pose+Masking'} opts={['Black Filling', 'Blurring']} />
     </div>
     </>
   )
 }
 
 export default Options
+
+// p5 makes picture in new line... check outline for example.
