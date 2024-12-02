@@ -46,7 +46,7 @@ def set_mode():
 
 
 def get_frame():
-    cap = cv2.VideoCapture(0)  # Video source (webcam or video file) ...
+    cap = cv2.VideoCapture(1)  # Video source (webcam or video file) ...
     while cap.isOpened():
         success, frame = cap.read()
         if not success:

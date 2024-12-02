@@ -35,7 +35,7 @@ a:hover {
 
 /* Utility Classes */
 .shadow-card {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow for cards */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.747); /* Subtle shadow for cards */
   border-radius: 0.5rem;
 }
 

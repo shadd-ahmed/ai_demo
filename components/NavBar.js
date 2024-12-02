@@ -3,7 +3,7 @@ function NavBar() {
     <>
  <nav className="w-full p-4">
     <div className="flex flex-wrap justify-between items-center">
-      <h1 className="text-[#CA6A2E] text-4xl md:text-5xl font-bold font-['Monofett']">
+      <h1 className="text-[#CA6A2E] text-6xl font-bold font-['Monofett']">
         Masking Lab
       </h1>
 

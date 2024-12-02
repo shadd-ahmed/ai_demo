@@ -12,7 +12,7 @@ const Tile = ({switchMode, mode, txt, img, opts, idx}) => {
     <div className={mode.key === idx ? selected : def} >
         <div className="flex flex-wrap flex-row justify-between pb-2">
             <div className='flex flex-wrap flex-col pl-5 justify-center'>
-              <div>
+              <div className=' items-center flex'>
                 <input
                   type="radio"
                   name="mode"
@@ -45,7 +45,7 @@ const Tile = ({switchMode, mode, txt, img, opts, idx}) => {
                 }  
               </div>
             </div>
-            <div className="w-1/3 mr-2 flex items-center justify-center" >
+            <div className="w-1/3 mr-3 flex items-center justify-center" >
                 <Image src={img} alt={txt} width={150} height={150} className='rounded-3xl' />
             </div>
         </div>

@@ -19,7 +19,7 @@ function Options() {
 
     return (
     <>
-    <div className="p-1 m-5 mr-0 pr-0 rounded-xl overflow-scroll flex flex-col  h-[500px] space-y-4 shadow-card ">
+    <div className=" m-5 mt-2 mr-0 rounded-xl overflow-scroll flex flex-col  h-[490px] space-y-4 shadow-card ">
     <Tile switchMode={switchMode} mode={mode} idx={0} img={'/raw.jpg'} txt={'Raw Feed'}/>
         <Tile switchMode={switchMode} mode={mode} idx={1} img={'/bounding_box.png'} txt={'Bounding Box'}  />
         <Tile switchMode={switchMode} mode={mode} idx={2} img={'/segmentation.png'} txt={'Segmentation'} />

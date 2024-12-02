@@ -4,7 +4,7 @@ import img from '../public/qr2.png'
 function Qr() {
   return (
     <>    
-      <div className="flex flex-col items-center justify-center m-5 mt-0 p-5  rounded-lg shadow-card">
+      <div className="flex flex-col items-center justify-center m-5 mr-0 mt-0 p-5  rounded-lg shadow-card">
       {/* Title */}
       <h2 className="text-white text-xl font-semibold font-['Montserrat']">
         Find Out More

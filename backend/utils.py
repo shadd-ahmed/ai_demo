@@ -94,13 +94,14 @@ def track(frame, idx):
         if temp[0] != 0 or temp[1] != 0: # see if still needed
             last_10_keypoints.append(temp)
         
-        if len(last_10_keypoints) > 20:
+        if len(last_10_keypoints) > 10:
             last_10_keypoints.pop(0)
         
         for i in range(1, len(last_10_keypoints)):
             pt1 = last_10_keypoints[i-1]
             pt2 = last_10_keypoints[i]
-            cv2.line(col_mask, pt1, pt2, (0, 255, 0), 2)  # Green line with thickness 2
+            color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
+            cv2.line(col_mask, pt1, pt2, color, 2)  # Green line with thickness 2
     
     return col_mask
 
@@ -191,7 +192,8 @@ def outline_black(frame):
             points = points.reshape((1, len(points), 2)) # reshape to fit cv2 func arguments 
             cv2.fillPoly(binary_mask, points, color=1)  # 1 indicates inside the polygon
             contours, _ = cv2.findContours(binary_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-            cv2.drawContours(canvas, contours, -1, (0, 255, 0), 2)  # Green contours with thickness 2
+            color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
+            cv2.drawContours(canvas, contours, -1, color, 2)  # Green contours with thickness 2
 
     return canvas
 
@@ -205,6 +207,7 @@ def outline(frame):
             points = points.reshape((1, len(points), 2)) # reshape to fit cv2 func arguments 
             cv2.fillPoly(binary_mask, points, color=1)  # 1 indicates inside the polygon
             contours, _ = cv2.findContours(binary_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-            cv2.drawContours(frame, contours, -1, (0, 255, 0), 2)  # Green contours with thickness 2
+            color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
+            cv2.drawContours(frame, contours, -1, color, 2)  # Green contours with thickness 2
 
     return frame

@@ -4,11 +4,11 @@ function LiveFeed() {
   return (
     <>
     {/* <div className="w-3/4 h-full border-[#CA6A2E] border-2 m-5 rounded-xl"> */}
-    <div className="w-full sm:w-[80%] h-auto border-[#CA6A2E] border-2 m-5 rounded-xl overflow-hidden shadow-card">
+    <div className="w-[90%] h-full border-[#CA6A2E] border-2 mt-0 m-3 content-end  rounded-xl overflow-hidden shadow-card">
     <img
           src={url}
           alt="Live Feed"
-          className="aspect-video w-full h-full object-cover rounded-xl transition-transform duration-200 hover:scale-105"
+          className="aspect-video w-full h-auto object-cover rounded-xl transition-transform scale-105 duration-200 hover:scale-110"
         />
     </div> 
     </>
