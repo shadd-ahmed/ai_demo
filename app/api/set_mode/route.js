@@ -5,7 +5,6 @@ export async function POST(req) {
     const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
     const { mode } = await req.json();
     const url = backend_url.concat('set_mode')
-    console.log('url is ', url)
     // Send mode change to Python backend
     // const response = await fetch('http://localhost:5000/set_mode', {
     const response = await fetch(url, {

@@ -1,13 +1,11 @@
 import Image from 'next/image'
 
-// css - default is opacity. if checked then bright...
-
-const Tile = ({switchMode, mode, txt, img, opts, idx}) => { 
-  // console.log(mode, txt)
+const Tile = ({switchMode, mode, title, img, opts, idx}) => { 
+  // console.log(mode, title, title, img, opts, idx)
   const radio = 'transition-all appearance-none rounded-full cursor-pointer h-3 w-3 ring-2 ring-[#CA6A2E] bg-none checked:border-2 checked:bg-orange-400 checked:border-white'
   const selected = 'rounded-md border-[#CA6A2E] my-2  w-full border-b-2' // highlight the selected option
   const def = 'rounded-md border-[#CA6A2E] my-2 w-full border-b-2 opacity-45'
-  // focus:ring-orange-500 focus:ring-2
+  // console.log('main', mode)
   return (
     <div className={mode.key === idx ? selected : def} >
         <div className="flex flex-wrap flex-row justify-between pb-2">
@@ -16,28 +14,29 @@ const Tile = ({switchMode, mode, txt, img, opts, idx}) => {
                 <input
                   type="radio"
                   name="mode"
-                  checked={mode.txt === txt}
-                  onChange={() => switchMode({txt:txt, key:idx})}
+                  checked={mode.key === idx && mode.opt_key == null}
+                  onChange={() => switchMode({opt_key: null, key:idx})}
                   className= {radio}
                 />
-                <label className="text-white text-xl font-['Montserrat'] pl-2 ">{txt}</label>
+                <label className="text-white text-xl font-['Montserrat'] pl-2 ">{title}</label>
               </div>
               <div className=''>
                 {mode.key === idx ? 
                   (opts) ?
                   <div className='ml-3'>
-                    {opts.map((opt_txt, key_idx) => {
-                      let new_name = txt.concat(' with ', opt_txt) 
+                    {opts.map((item, key_idx) => {
+                      // console.log('item', item)
+                      // console.log('ehcking', mode.opt_key, item.key, mode.opt_key === item.key)
                       return (
                       <div key={key_idx}>
                         <input
                           type="radio"
                           name="mode"
-                          checked={mode.txt === new_name}
-                          onChange={() => switchMode({txt: new_name, key:idx})}
+                          checked={mode.opt_key === item.key} // it needs to reload to get this ....
+                          onChange={() => switchMode({opt_key: item.key, key:idx})}
                           className= {radio}
                         />
-                        <label className="text-white font-['Montserrat'] pl-2 text-l ">{opt_txt}</label>
+                        <label className="text-white font-['Montserrat'] pl-2 text-l ">{item.title}</label>
                       </div>
                       )
                     })}
@@ -46,7 +45,7 @@ const Tile = ({switchMode, mode, txt, img, opts, idx}) => {
               </div>
             </div>
             <div className="w-1/3 mr-3 flex items-center justify-center" >
-                <Image src={img} alt={txt} width={150} height={150} className='rounded-3xl' />
+                <Image src={img} alt={title} width={150} height={150} className='rounded-3xl' />
             </div>
         </div>
     </div>

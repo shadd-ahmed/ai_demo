@@ -84,6 +84,13 @@ def bounding_box(frame):
     result = model_det(frame)
     return result[0].plot()
 
+def track_left(frame):
+    return track(frame, 10)
+def track_right(frame):
+    return track(frame, 9)
+def track_nose(frame):
+    return track(frame, 0)
+
 def track(frame, idx):
     frame = np.fliplr(np.array(frame)) # reflect it to make sure we are tracking the right part. 
     col_mask = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8) # blank colored mask
@@ -210,4 +217,7 @@ def outline(frame):
             color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
             cv2.drawContours(frame, contours, -1, color, 2)  # Green contours with thickness 2
 
+    return frame
+
+def raw(frame):
     return frame

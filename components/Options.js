@@ -2,9 +2,20 @@
 import { useState } from 'react';
 import Tile from './Tile';
 
-function Options() {
+function Options(){
 
-    const [mode, setMode] = useState({txt:'Raw Feed', key:0});
+  const options_list = [
+    {key:'0', img:'/raw.jpg', title:'Raw Feed', opts: null},
+    {key:'1', img:'/bounding_box.png', title:'Bounding Box', opts: null},
+    {key:'2', img:'/segmentation.png', title:'Segmentation', opts: null},
+    {key:'3', img:'/pose_black.png', title:'Pose', opts: [{key: '0', title: 'Black Background'}]},
+    {key:'4', img:'/tracking.png', title:'Tracking', opts: [{key: '0', title: 'Left Hand'}, {key: '1', title: 'Right Hand'}, {key: '2', title: 'Nose'}]},
+    {key:'5', img:'/outline_black.png', title:'Outline', opts: [{key: '0', title: 'Black Background'}]},
+    {key:'6', img:'/mask_blur.png', title:'Masking', opts: [{key: '0', title: 'Black Filling'}, {key: '1', title: 'Blurring'}]},
+    {key:'7', img:'/mask_color_pose.png', title:'Pose+Masking', opts: [{key: '0', title: 'Black Filling'}, {key: '1', title: 'Blurring'}]},
+]
+
+    const [mode, setMode] = useState({key: '0', opt_key: null});
 
     const switchMode = async (newMode) => {
       setMode(newMode);
@@ -20,14 +31,14 @@ function Options() {
     return (
     <>
     <div className=" m-5 mt-2 mr-0 rounded-xl overflow-scroll flex flex-col  h-[490px] space-y-4 shadow-card ">
-    <Tile switchMode={switchMode} mode={mode} idx={0} img={'/raw.jpg'} txt={'Raw Feed'}/>
-        <Tile switchMode={switchMode} mode={mode} idx={1} img={'/bounding_box.png'} txt={'Bounding Box'}  />
-        <Tile switchMode={switchMode} mode={mode} idx={2} img={'/segmentation.png'} txt={'Segmentation'} />
-        <Tile switchMode={switchMode} mode={mode} idx={3} img={'/pose_black.png'} txt={'Pose'} opts={['Black Background']} />
-        <Tile switchMode={switchMode} mode={mode} idx={4} img={'/tracking.png'} txt={'Tracking'} opts={['Left Hand', 'Right Hand', 'Nose',]}  />
-        <Tile switchMode={switchMode} mode={mode} idx={5} img={'/outline_black.png'} txt={'Outline'} opts={['Black Background']} />
-        <Tile switchMode={switchMode} mode={mode} idx={6} img={'/mask_blur.png'} txt={'Masking'} opts={['Black Filling', 'Blurring']} />
-        <Tile switchMode={switchMode} mode={mode} idx={7} img={'/mask_color_pose.png'} txt={'Pose+Masking'} opts={['Black Filling', 'Blurring']} />
+      {      
+        options_list.map((item, key) => {
+          // console.log(item, key)
+        return (
+          <Tile key={key} switchMode={switchMode} mode={mode} idx={item.key} img={item.img} title={item.title} opts={item.opts}  />
+          )
+        })  
+      }
     </div>
     </>
   )
@@ -35,4 +46,3 @@ function Options() {
 
 export default Options
 
-// p5 makes picture in new line... check outline for example.
