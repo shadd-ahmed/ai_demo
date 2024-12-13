@@ -3,7 +3,6 @@ function LiveFeed() {
   const url = backend_url.concat('get_frame')
   return (
     <>
-    {/* <div className="w-3/4 h-full border-[#CA6A2E] border-2 m-5 rounded-xl"> */}
     <div className="w-[90%] h-full border-[#CA6A2E] border-2 mt-0 m-3 content-end  rounded-xl overflow-hidden shadow-card">
     <img
           src={url}

@@ -81,7 +81,7 @@ def add_kpts(frame, kpts):
     return frame
 
 def bounding_box(frame):
-    result = model_det(frame)
+    result = model_det(frame, verbose=False)
     return result[0].plot()
 
 def track_left(frame):
@@ -94,7 +94,7 @@ def track_nose(frame):
 def track(frame, idx):
     frame = np.fliplr(np.array(frame)) # reflect it to make sure we are tracking the right part. 
     col_mask = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8) # blank colored mask
-    results = model_pose(frame)
+    results = model_pose(frame, verbose=False)
 
     if results[0].keypoints[0].xy.shape[1]: # in case of no detections 
         temp = results[0].keypoints[0].xy[0].cpu().numpy().astype(int)[idx]
@@ -113,21 +113,21 @@ def track(frame, idx):
     return col_mask
 
 def mask_blur_pose(frame):
-    pose = model_pose(frame) # we will use pose coord from this 
+    pose = model_pose(frame, verbose=False) # we will use pose coord from this 
     frame = mask_blur(frame)
     if pose[0].keypoints[0].xy.shape[1]:
         return add_kpts(frame, pose[0].keypoints)    
     return frame 
 
 def mask_color_pose(frame):
-    pose = model_pose(frame) # we will use pose coord from this 
+    pose = model_pose(frame, verbose=False) # we will use pose coord from this 
     frame = mask_color(frame)
     if pose[0].keypoints[0].xy.shape[1]:
         return add_kpts(frame, pose[0].keypoints)   
     return frame 
 
 def mask_blur(frame):
-    results = model_seg(frame)    
+    results = model_seg(frame, verbose=False)    
     if results[0].masks:
         masks = results[0].masks.xy # get masks for frame
         mask = np.zeros((frame.shape[0], frame.shape[1]), dtype=np.uint8) # blank colored mask
@@ -146,7 +146,7 @@ def mask_blur(frame):
     return frame
 
 def mask_color(frame):
-    results = model_seg(frame)    
+    results = model_seg(frame, verbose=False)    
     if results[0].masks:
         masks = results[0].masks.xy # get masks for frame
         mask = np.zeros((frame.shape[0], frame.shape[1]), dtype=np.uint8) # blank colored mask
@@ -161,7 +161,7 @@ def mask_color(frame):
     return frame
 
 def segmentation(frame):
-    results = model_seg(frame)    
+    results = model_seg(frame, verbose=False)    
     if results[0].masks:
         masks = results[0].masks.xy # get masks for frame
         col_mask = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8) # blank colored mask
@@ -176,21 +176,21 @@ def segmentation(frame):
     return frame
 
 def pose(frame):
-    results = model_pose(frame)
+    results = model_pose(frame, verbose=False)
     if results[0].keypoints[0].xy.shape[1]:
         return add_kpts(frame, results[0].keypoints)
     return frame
 
 def pose_black(frame):
     canvas = np.zeros(frame.shape)
-    results = model_pose(frame)
+    results = model_pose(frame, verbose=False)
     if results[0].keypoints[0].xy.shape[1]:
         return add_kpts(canvas, results[0].keypoints)
     return canvas
 
 def outline_black(frame):
     canvas = np.zeros(frame.shape)
-    results = model_seg(frame)    
+    results = model_seg(frame, verbose=False)    
     if results[0].masks:
         masks = results[0].masks.xy # get masks for frame
         binary_mask = np.zeros((frame.shape[0], frame.shape[1]), dtype=np.uint8)  # Blank binary mask
@@ -205,7 +205,7 @@ def outline_black(frame):
     return canvas
 
 def outline(frame):
-    results = model_seg(frame)    
+    results = model_seg(frame, verbose=False)    
     if results[0].masks:
         masks = results[0].masks.xy # get masks for frame
         binary_mask = np.zeros((frame.shape[0], frame.shape[1]), dtype=np.uint8)  # Blank binary mask
