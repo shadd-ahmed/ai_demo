@@ -13,7 +13,8 @@ npm run dev
 ```
 conda create -n CHOSEN_NAME python==3.10.0 ipython pip 
 conda activate CHOSEN_NAME  
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118  
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install -r requirements.txt
 python backend_cam.py 
 ```
 
