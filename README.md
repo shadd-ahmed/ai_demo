@@ -21,8 +21,9 @@ You can open ```localhost:3000``` on a browser.
 
 ### Backend  
 > Open an Anaconda terminal  
-> Navigate to your directory  
+> Navigate to your directory 
 ```
+cd backend
 conda create -n CHOSEN_NAME python==3.10.0 ipython pip 
 conda activate CHOSEN_NAME  
 pip install -r requirements.txt
