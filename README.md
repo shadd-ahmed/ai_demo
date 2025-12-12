@@ -1,6 +1,7 @@
 ## Demo
-![](demo_1.mp4)
-![](demo_2.mp4)
+[![Watch Demo Video 1]()](demo_1.mp4)
+
+[![Watch Demo Video 2]()](demo_2.mp4)
 
 ## Installation 
 
